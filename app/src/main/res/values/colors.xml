@@ -5,6 +5,7 @@
     <color name="colorAccent">#FF4081</color>
     <color name="nobg">#FFFFFFFF</color>
     <color name="textcolor">#FF000000</color>
+    <color name="gray">#FFDFD6D6</color>
 
 
 </resources>

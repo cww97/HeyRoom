@@ -16,8 +16,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".Ocr_infoActivity"></activity>
+        <activity android:name=".Ocr_infoActivity" />
+        <activity android:name=".tempActivity" />
+        <activity android:name=".LightsActivity"></activity>
     </application>
 
 </manifest>
