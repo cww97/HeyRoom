@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="24dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:layout_margin="10px" >
+
+        <TextView
+            android:id="@+id/userID"
+            android:layout_width="match_parent"
+            android:layout_height="32dp"
+            android:text="@string/app_name"
+            android:textSize="20dp"/>
+
+        <ImageView
+            android:layout_width="63dp"
+            android:layout_height="66dp"
+            android:src="@mipmap/home" />
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="5">
+
+        <ImageButton
+            android:id="@+id/bt_faceid"
+
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="57dp"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:scaleType="centerInside"
+            android:src="@mipmap/faceid"
+            android:onClick="toFace"/>
+
+        <ImageButton
+            android:id="@+id/bt_meida"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_toRightOf="@id/bt_faceid"
+            android:layout_marginLeft="60dp"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:scaleType="centerInside"
+            android:src="@mipmap/media" />
+
+        <ImageButton
+            android:id="@+id/bt_air"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_alignStart="@+id/bt_faceid"
+            android:layout_marginTop="40dp"
+            android:layout_below="@id/bt_faceid"
+           android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:scaleType="centerInside"
+            android:src="@mipmap/air" />
+
+        <ImageButton
+            android:id="@+id/bt_celan"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_below="@+id/bt_meida"
+            android:layout_toRightOf="@+id/bt_air"
+            android:layout_marginTop="40dp"
+            android:layout_marginLeft="60dp"
+           android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:scaleType="centerInside"
+            android:src="@mipmap/clean" />
+
+        <ImageButton
+            android:id="@+id/bt_security"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_alignStart="@+id/bt_faceid"
+            android:layout_below="@id/bt_air"
+            android:layout_marginTop="40dp"
+           android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:scaleType="centerInside"
+            android:src="@mipmap/security" />
+
+        <ImageButton
+            android:id="@+id/bt_light"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_below="@id/bt_celan"
+            android:layout_toRightOf="@+id/bt_air"
+            android:layout_marginTop="40dp"
+            android:layout_marginLeft="60dp"
+           android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:scaleType="centerInside"
+            android:src="@mipmap/light" />
+
+    </RelativeLayout>
+
+
+
+</LinearLayout>

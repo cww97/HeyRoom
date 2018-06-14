@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="140dp">
+
+            <ImageButton
+                android:id="@+id/bt_ocrbacktohome"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_alignParentBottom="true"
+
+                android:layout_alignParentStart="true"
+                android:background="@color/nobg"
+                android:scaleType="centerInside"
+                android:src="@mipmap/home_green" />
+
+            <TextView
+                android:id="@+id/bt_attentiontop"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/attentiontop"
+                android:textColor="@color/textcolor"
+                android:textSize="25dp"
+                android:textStyle="italic" />
+
+            <TextView
+                android:id="@+id/bt_attentionbottom"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/bt_attentiontop"
+                android:text="@string/attentionbottom"
+                android:textColor="@color/textcolor"
+                android:textSize="20dp"
+                android:textStyle="normal" />
+
+            <ImageView
+                android:id="@+id/pic_user"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentTop="true"
+                android:src="@mipmap/temp" />
+
+        </RelativeLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0px"
+        android:layout_weight="1">
+
+
+
+    </LinearLayout>
+
+</LinearLayout>
