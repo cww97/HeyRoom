@@ -18,7 +18,9 @@
         </activity>
         <activity android:name=".Ocr_infoActivity" />
         <activity android:name=".tempActivity" />
-        <activity android:name=".LightsActivity"></activity>
+        <activity android:name=".LightsActivity" />
+        <activity android:name=".LightControllerActivity" />
+        <activity android:name=".AirControllerActivity"></activity>
     </application>
 
 </manifest>

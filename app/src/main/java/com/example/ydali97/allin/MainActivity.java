@@ -9,7 +9,8 @@ import android.widget.ImageButton;
 
 public class MainActivity extends AppCompatActivity {
     private ImageButton OCR;
-
+    private ImageButton AIR;
+    private ImageButton LIGHT;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,7 +24,28 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         }
-);
+        );
+
+        AIR = (ImageButton) findViewById(R.id.bt_air);
+        AIR.setOnClickListener(new View.OnClickListener(){
+                                   public void onClick(View v) {
+                                       Intent intent = new Intent(MainActivity.this, AirControllerActivity.class);
+
+                                       startActivity(intent);
+                                   }
+                               }
+                               );
+
+        LIGHT = (ImageButton) findViewById(R.id.bt_light);
+        LIGHT.setOnClickListener(new View.OnClickListener(){
+                                   public void onClick(View v) {
+                                       Intent intent = new Intent(MainActivity.this, LightsActivity.class);
+
+                                       startActivity(intent);
+                                   }
+                               }
+        );
+
         Init();
     }
     private void Init(){
