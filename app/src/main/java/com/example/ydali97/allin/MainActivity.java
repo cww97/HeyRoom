@@ -11,6 +11,7 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton OCR;
     private ImageButton AIR;
     private ImageButton LIGHT;
+    private ImageButton CLEAN;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,6 +41,16 @@ public class MainActivity extends AppCompatActivity {
         LIGHT.setOnClickListener(new View.OnClickListener(){
                                    public void onClick(View v) {
                                        Intent intent = new Intent(MainActivity.this, LightsActivity.class);
+
+                                       startActivity(intent);
+                                   }
+                               }
+        );
+
+        CLEAN = (ImageButton) findViewById(R.id.bt_celan);
+        CLEAN.setOnClickListener(new View.OnClickListener(){
+                                   public void onClick(View v) {
+                                       Intent intent = new Intent(MainActivity.this, Cleaner.class);
 
                                        startActivity(intent);
                                    }
