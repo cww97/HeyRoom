@@ -1,12 +1,13 @@
 package com.example.ydali97.allin;
 
+import android.app.Activity;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
+
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
 
-public class AirControllerActivity extends AppCompatActivity {
+public class AirControllerActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

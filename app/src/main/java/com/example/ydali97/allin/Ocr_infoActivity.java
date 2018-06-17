@@ -1,8 +1,9 @@
 package com.example.ydali97.allin;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -11,7 +12,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Ocr_infoActivity extends AppCompatActivity {
+public class Ocr_infoActivity extends Activity {
 
     private TextView mTextMessage;
     private List<FunText> funlist = new ArrayList<>();

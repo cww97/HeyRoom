@@ -35,7 +35,6 @@
 
         <ImageButton
             android:id="@+id/bt_faceid"
-
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_alignParentStart="true"
@@ -60,7 +59,7 @@
             android:id="@+id/bt_air"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:layout_alignStart="@+id/bt_faceid"
+            android:layout_alignStart="@id/bt_faceid"
             android:layout_marginTop="40dp"
             android:layout_below="@id/bt_faceid"
            android:background="?android:attr/selectableItemBackgroundBorderless"
@@ -68,11 +67,11 @@
             android:src="@mipmap/air" />
 
         <ImageButton
-            android:id="@+id/bt_celan"
+            android:id="@+id/bt_clean"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:layout_below="@+id/bt_meida"
-            android:layout_toRightOf="@+id/bt_air"
+            android:layout_below="@id/bt_meida"
+            android:layout_toRightOf="@id/bt_air"
             android:layout_marginTop="40dp"
             android:layout_marginLeft="60dp"
            android:background="?android:attr/selectableItemBackgroundBorderless"
@@ -83,7 +82,7 @@
             android:id="@+id/bt_security"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:layout_alignStart="@+id/bt_faceid"
+            android:layout_alignStart="@id/bt_faceid"
             android:layout_below="@id/bt_air"
             android:layout_marginTop="40dp"
            android:background="?android:attr/selectableItemBackgroundBorderless"
@@ -94,8 +93,8 @@
             android:id="@+id/bt_light"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:layout_below="@id/bt_celan"
-            android:layout_toRightOf="@+id/bt_air"
+            android:layout_below="@id/bt_clean"
+            android:layout_toRightOf="@id/bt_air"
             android:layout_marginTop="40dp"
             android:layout_marginLeft="60dp"
            android:background="?android:attr/selectableItemBackgroundBorderless"

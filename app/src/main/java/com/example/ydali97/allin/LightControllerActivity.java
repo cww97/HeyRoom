@@ -1,12 +1,15 @@
 package com.example.ydali97.allin;
 
+import android.app.Activity;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
+
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
 
-public class LightControllerActivity extends AppCompatActivity {
+import com.example.ydali97.allin.light.DeviceScanActivity;
+
+public class LightControllerActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,7 +22,7 @@ public class LightControllerActivity extends AppCompatActivity {
         imageButtonToBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intentToMainActivity=new Intent(LightControllerActivity.this,LightsActivity.class);
+                Intent intentToMainActivity=new Intent(LightControllerActivity.this,DeviceScanActivity.class);
                 startActivity(intentToMainActivity);
 
             }

@@ -1,9 +1,10 @@
 package com.example.ydali97.allin;
 
-import android.support.v7.app.AppCompatActivity;
+
+import android.app.Activity;
 import android.os.Bundle;
 
-public class tempActivity extends AppCompatActivity {
+public class tempActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
