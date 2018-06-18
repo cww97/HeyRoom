@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.example.ydali97.allin.light;
+package com.example.ydali97.allin.car;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -26,7 +26,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
@@ -35,37 +34,55 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ScrollView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ydali97.allin.R;
 import com.example.ydali97.allin.ble.BluetoothLeService;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayDeque;
+import java.util.Queue;
 
-public abstract class AbstractBleControlActivity extends Activity {
-    private final static String TAG = AbstractBleControlActivity.class.getSimpleName();
+
+/**
+ * For a given BLE device, this Activity provides the user interface to connect, display data,
+ * and display GATT services and characteristics supported by the device.  The Activity
+ * communicates with {@code BluetoothLeService}, which in turn interacts with the
+ * Bluetooth LE API.
+ */
+public class DeviceControlActivity extends Activity {
+    private final static String TAG = DeviceControlActivity.class.getSimpleName();
 
     public static final String EXTRAS_DEVICE_NAME = "DEVICE_NAME";
     public static final String EXTRAS_DEVICE_ADDRESS = "DEVICE_ADDRESS";
 
-    public static int BLE_MSG_SEND_INTERVAL = 60;
+    SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yy,MM,dd,HH,mm,ss");
+
+    public static int BLE_MSG_SEND_INTERVAL = 100;
     public static int BLE_MSG_BUFFER_LEN = 18;
 
-    protected String currDeviceName, currDeviceAddress;
+    private Button sendButton;
+    private EditText msgEdit;
+    private ScrollView returnTextScroller;
+    private TextView isSerial, mConnectionState, returnText;
+    private ImageView infoButton;
 
-    protected Activity activity;
+    public static final int RET_QUEUE_LEN = 100;
+    private Queue<String> retQueue;
 
-    //    protected TextView isSerial, mConnectionState;
-    protected ImageView infoButton;
+    private String mDeviceName, mDeviceAddress;
 
-    protected BluetoothLeService mBluetoothLeService;
-    protected BluetoothGattCharacteristic characteristicTX, characteristicRX;
-    protected static boolean mConnected = false, characteristicReady = false;
-
-    protected StringBuilder msgBuffer;
+    private BluetoothLeService mBluetoothLeService;
+    private BluetoothGattCharacteristic characteristicTX, characteristicRX;
+    private boolean mConnected = false, characteristicReady = false;
 
     // Code to manage Service lifecycle.
-    protected final ServiceConnection mServiceConnection = new ServiceConnection() {
+    private final ServiceConnection mServiceConnection = new ServiceConnection() {
 
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder service) {
@@ -75,7 +92,7 @@ public abstract class AbstractBleControlActivity extends Activity {
                 finish();
             }
             // Automatically connects to the device upon successful start-up initialization.
-            mBluetoothLeService.connect(currDeviceAddress);
+            mBluetoothLeService.connect(mDeviceAddress);
         }
 
         @Override
@@ -90,7 +107,7 @@ public abstract class AbstractBleControlActivity extends Activity {
     // ACTION_GATT_SERVICES_DISCOVERED: discovered GATT services.
     // ACTION_DATA_AVAILABLE: received data from the device.  This can be a result of read
     //                        or notification operations.
-    protected final BroadcastReceiver mGattUpdateReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver mGattUpdateReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             final String action = intent.getAction();
@@ -101,38 +118,51 @@ public abstract class AbstractBleControlActivity extends Activity {
             } else if (BluetoothLeService.ACTION_GATT_DISCONNECTED.equals(action)) {
                 mConnected = false;
                 updateConnectionState(R.string.disconnected);
-                updateUnreadyState(R.string.unready);
                 invalidateOptionsMenu();
             } else if (BluetoothLeService.ACTION_GATT_SERVICES_DISCOVERED.equals(action)) {
+//                BluetoothGattService downloadService = mBluetoothLeService.getBleDownService();
+//                if (downloadService == null) {
+//                    Toast.makeText(DeviceControlActivity.this, getString(R.string.without_service), Toast.LENGTH_SHORT).show();
+//                    return;
+//                }
+
                 BluetoothGattService gattService = mBluetoothLeService.getSoftSerialService();
                 if (gattService == null) {
-                    toastMessage(getString(R.string.without_service));
+                    Toast.makeText(DeviceControlActivity.this, getString(R.string.without_service), Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-                if (currDeviceName.startsWith("Microduino")) {
+                if(mDeviceName.startsWith("Microdui") || mDeviceName.startsWith("mCookie")) {
                     characteristicTX = gattService.getCharacteristic(BluetoothLeService.UUID_MD_RX_TX);
-                } else if (currDeviceName.startsWith("EtOH")) {
+                }else if(mDeviceName.startsWith("EtOH")) {
                     characteristicTX = gattService.getCharacteristic(BluetoothLeService.UUID_ETOH_RX_TX);
                 }
+
                 characteristicRX = characteristicTX;
 
                 if (characteristicTX != null) {
                     mBluetoothLeService.setCharacteristicNotification(characteristicTX, true);
 
+                    isSerial.setText("Serial ready");
                     updateReadyState(R.string.ready);
                 } else {
-//                    isSerial.setText("Serial can't be found");
-                    updateUnreadyState(R.string.unready);
+                    isSerial.setText("Serial can't be found");
                 }
 
             } else if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action)) {
-                displayData(intent.getStringExtra(mBluetoothLeService.EXTRA_DATA));
+                String d = intent.getStringExtra(mBluetoothLeService.EXTRA_DATA);
+                Log.d("Received : " , d);
+
+                if(retQueue.size() > RET_QUEUE_LEN - 1 )
+                    retQueue.poll();
+                retQueue.offer(d);
+
+                displayData();
             }
         }
     };
 
-    protected static IntentFilter makeGattUpdateIntentFilter() {
+    private static IntentFilter makeGattUpdateIntentFilter() {
         final IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(BluetoothLeService.ACTION_GATT_CONNECTED);
         intentFilter.addAction(BluetoothLeService.ACTION_GATT_DISCONNECTED);
@@ -144,17 +174,38 @@ public abstract class AbstractBleControlActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        activity = this;
+        setContentView(R.layout.car_gatt_services_characteristics);
 
         final Intent intent = getIntent();
-        currDeviceName = intent.getStringExtra(EXTRAS_DEVICE_NAME);
-        currDeviceAddress = intent.getStringExtra(EXTRAS_DEVICE_ADDRESS);
+        mDeviceName = intent.getStringExtra(EXTRAS_DEVICE_NAME);
+        mDeviceAddress = intent.getStringExtra(EXTRAS_DEVICE_ADDRESS);
 
-//        // Sets up UI references.
-//        mConnectionState = (TextView) findViewById(R.id.connection_state);
-//        // is serial present?
-//        isSerial = (TextView) findViewById(R.id.isSerial);
+        // Sets up UI references.
+        mConnectionState = (TextView) findViewById(R.id.connection_state);
+        // is serial present?
+        isSerial = (TextView) findViewById(R.id.isSerial);
+
+        msgEdit = (EditText) findViewById(R.id.input);
+
+        returnTextScroller = (ScrollView) findViewById(R.id.scrollView);
+        returnText = (TextView) findViewById(R.id.returnText);
+
+        retQueue = new ArrayDeque<String>(RET_QUEUE_LEN);
+
+        sendButton = (Button) findViewById(R.id.sendButton);
+
+        sendButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                if (characteristicReady) {
+                    StringBuffer sb = new StringBuffer();
+                    sb.append(msgEdit.getText()).append("\n");
+
+                    sendMessage(sb.toString());
+                }
+            }
+        });
 
         infoButton = (ImageView) findViewById(R.id.infoImage);
         infoButton.setOnClickListener(new View.OnClickListener() {
@@ -165,50 +216,36 @@ public abstract class AbstractBleControlActivity extends Activity {
             }
         });
 
-        getActionBar().setTitle(currDeviceName);
+        getActionBar().setTitle(mDeviceName);
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
         Intent gattServiceIntent = new Intent(this, BluetoothLeService.class);
         bindService(gattServiceIntent, mServiceConnection, BIND_AUTO_CREATE);
-
-        registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
-        if (mBluetoothLeService != null) {
-            final boolean result = mBluetoothLeService.connect(currDeviceAddress);
-            Log.d(TAG, "Connect request result=" + result);
-        }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
 
-//        Intent gattServiceIntent = new Intent(this, BluetoothLeService.class);
-//        bindService(gattServiceIntent, mServiceConnection, BIND_AUTO_CREATE);
-//
-//        registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
-//        if (mBluetoothLeService != null) {
-//            final boolean result = mBluetoothLeService.connect(currDeviceAddress);
-//            Log.d(TAG, "Connect request result=" + result);
-//        }
+        registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
+        if (mBluetoothLeService != null) {
+            final boolean result = mBluetoothLeService.connect(mDeviceAddress);
+            Log.d(TAG, "Connect request result=" + result);
+        }
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-//        unregisterReceiver(mGattUpdateReceiver);
-//
-//        unbindService(mServiceConnection);
-//        mBluetoothLeService = null;
+
+        unregisterReceiver(mGattUpdateReceiver);
     }
 
     @Override
     protected void onDestroy() {
-        unregisterReceiver(mGattUpdateReceiver);
-
+        super.onDestroy();
         unbindService(mServiceConnection);
         mBluetoothLeService = null;
-
-        super.onDestroy();
     }
 
     @Override
@@ -216,7 +253,7 @@ public abstract class AbstractBleControlActivity extends Activity {
         getMenuInflater().inflate(R.menu.gatt_services, menu);
         if (mConnected) {
             menu.findItem(R.id.menu_connect).setVisible(false);
-            menu.findItem(R.id.menu_disconnect).setVisible(false);
+            menu.findItem(R.id.menu_disconnect).setVisible(true);
         } else {
             menu.findItem(R.id.menu_connect).setVisible(true);
             menu.findItem(R.id.menu_disconnect).setVisible(false);
@@ -228,7 +265,7 @@ public abstract class AbstractBleControlActivity extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_connect:
-                mBluetoothLeService.connect(currDeviceAddress);
+                mBluetoothLeService.connect(mDeviceAddress);
                 return true;
             case R.id.menu_disconnect:
                 mBluetoothLeService.disconnect();
@@ -240,44 +277,38 @@ public abstract class AbstractBleControlActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    protected void updateConnectionState(final int resourceId) {
+    private void updateConnectionState(final int resourceId) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                // mConnectionState.setText(resourceId);
+                mConnectionState.setText(resourceId);
             }
         });
     }
 
-    protected void updateUnreadyState(final int resourceId) {
+    private void updateReadyState(final int resourceId) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                characteristicReady = false;
+                wait_ble(2000);
 
-                // isSerial.setText(getString(resourceId));
-                getActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.ble_unconnect)));
-
-            }
-        });
-    }
-
-    protected void updateReadyState(final int resourceId) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
                 characteristicReady = true;
 
-                // isSerial.setText(getString(resourceId));
-                getActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.ble_connected)));
+                sendButton.setEnabled(characteristicReady);
+
+                //Toast.makeText(DeviceControlActivity.this, getString(resourceId), Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-    protected void displayData(String data) {
-        if (data != null) {
-            Log.v(TAG, "BLE Return Data : " + data);
-        }
+    private void displayData() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                returnText.setText(retQueue.toString());
+                returnTextScroller.smoothScrollTo(0, returnText.getBottom());
+            }
+        });
     }
 
     public void wait_ble(int i) {
@@ -288,27 +319,28 @@ public abstract class AbstractBleControlActivity extends Activity {
         }
     }
 
-    protected void sendMessage(String msg) {
-        Log.v(TAG, "sendMsg msg= " + msg);
+    private void sendMessage(String msg) {
+        int msglen = msg.length();
+        Log.d(TAG, "Sending Result=" + msglen + ":" + msg);
 
         if (characteristicReady && (mBluetoothLeService != null)
                 && (characteristicTX != null) && (characteristicRX != null)) {
-            characteristicTX.setValue(msg);
-            mBluetoothLeService.writeCharacteristic(characteristicTX);
+
+            for (int offset = 0; offset < msglen; offset += BLE_MSG_BUFFER_LEN) {
+                characteristicTX.setValue(msg.substring(offset, Math.min(offset + BLE_MSG_BUFFER_LEN, msglen)));
+                mBluetoothLeService.writeCharacteristic(characteristicTX);
+                wait_ble(BLE_MSG_SEND_INTERVAL);
+            }
         } else {
-            toastMessage(getString(R.string.disconnected));
+            Toast.makeText(DeviceControlActivity.this, getString(R.string.disconnected), Toast.LENGTH_SHORT).show();
         }
     }
 
-    protected void iascDialog() {
+    private void iascDialog() {
         LayoutInflater inflater = getLayoutInflater();
         View layout = inflater.inflate(R.layout.iasc_dialog,
                 (ViewGroup) findViewById(R.id.dialog));
         new AlertDialog.Builder(this).setView(layout)
                 .setPositiveButton("OK", null).show();
-    }
-
-    public void toastMessage(String msg) {
-         Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
     }
 }

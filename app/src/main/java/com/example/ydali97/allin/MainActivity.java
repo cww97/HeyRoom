@@ -53,7 +53,7 @@ public class MainActivity extends Activity {
         CLEAN = (ImageButton) findViewById(R.id.bt_clean);
         CLEAN.setOnClickListener(new View.OnClickListener(){
                                    public void onClick(View v) {
-                                       Intent intent = new Intent(MainActivity.this, Cleaner.class);
+                                       Intent intent = new Intent(MainActivity.this, com.example.ydali97.allin.car.DeviceScanActivity.class);
 
                                        startActivity(intent);
                                    }

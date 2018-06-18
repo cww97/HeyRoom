@@ -30,7 +30,7 @@ import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import com.example.ydali97.allin.R;
-import com.example.ydali97.allin.light.ble.BluetoothLeService;
+import com.example.ydali97.allin.ble.BluetoothLeService;
 import com.example.ydali97.allin.light.colorpicker.ColorPicker;
 import com.example.ydali97.allin.light.colorpicker.MultiColorPicker;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;

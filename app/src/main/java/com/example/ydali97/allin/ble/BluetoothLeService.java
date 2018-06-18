@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.example.ydali97.allin.light.ble;
+package com.example.ydali97.allin.ble;
 
 import android.app.Service;
 import android.bluetooth.BluetoothAdapter;

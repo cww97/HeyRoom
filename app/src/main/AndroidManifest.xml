@@ -28,7 +28,9 @@
         <activity android:name=".light.DeviceScanActivity"/>
         <activity android:name=".light.DeviceControlActivity" android:screenOrientation="portrait"/>
         <activity android:name=".light.PicControlActivity" android:screenOrientation="portrait"/>
-        <service android:name=".light.ble.BluetoothLeService" android:enabled="true"/>
+        <activity android:name=".car.DeviceControlActivity"/>
+        <activity android:name=".car.DeviceScanActivity"/>
+        <service android:name=".ble.BluetoothLeService" android:enabled="true"/>
 
 
 
