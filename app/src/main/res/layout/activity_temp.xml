@@ -1,28 +1,51 @@
-<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".tempActivity">
+    android:layout_height="match_parent">
 
-    <ImageView
-        android:id="@+id/pic_temp"
+    <TextView
+        android:id="@+id/textview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="110dp"
-        android:src="@mipmap/working" />
+        android:layout_marginTop="46dp"
+        android:text="请把你的大脸盘子放屏幕中间qwq"
+        android:textSize="20dp"
+        />
 
     <TextView
-        android:id="@+id/text_pic"
+        android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="201dp"
-        android:text="正在施工"
-        android:textSize="40dp" />
+        android:layout_marginBottom="116dp"
+        android:text="请调整位置，可能会放不下ヽ(✿ﾟ▽ﾟ)ノ"
+        />
 
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/textview"
+        android:layout_marginStart="127dp"
+        android:text="帅气迷人的脸"
+        android:textSize="20dp"
+        />
+    <Button
+        android:id="@+id/capture"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="44dp"
+        android:text="test" />
+    <com.example.ydali97.allin.AutoFitTextureView
+        android:id="@+id/texture"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_centerInParent="true"/>
 </RelativeLayout>
