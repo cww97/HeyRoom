@@ -32,6 +32,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -81,6 +82,12 @@ public class DeviceControlActivity extends Activity {
     private BluetoothGattCharacteristic characteristicTX, characteristicRX;
     private boolean mConnected = false, characteristicReady = false;
 
+
+    private Button forward;
+    private Button back;
+    private Button left;
+    private Button right;
+    private Button stop;
     // Code to manage Service lifecycle.
     private final ServiceConnection mServiceConnection = new ServiceConnection() {
 
@@ -221,6 +228,98 @@ public class DeviceControlActivity extends Activity {
 
         Intent gattServiceIntent = new Intent(this, BluetoothLeService.class);
         bindService(gattServiceIntent, mServiceConnection, BIND_AUTO_CREATE);
+
+        forward = (Button) findViewById(R.id.car_front);
+        back = (Button) findViewById(R.id.car_back);
+        left = (Button) findViewById(R.id.car_left);
+        right = (Button) findViewById(R.id.car_right);
+        stop = (Button) findViewById(R.id.car_stop);
+
+        forward.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if(event.getAction() == MotionEvent.ACTION_DOWN)
+                {
+                    StringBuffer sb = new StringBuffer();
+                    sb.append("G").append("\n");
+                    sendMessage(sb.toString());
+                }
+                else if(event.getAction() == MotionEvent.ACTION_UP)
+                {
+                    StringBuffer sb = new StringBuffer();
+                    sb.append("S").append("\n");
+                    sendMessage(sb.toString());
+                }
+
+                return false;
+            }
+        });
+        back.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if(event.getAction() == MotionEvent.ACTION_DOWN)
+                {
+                    StringBuffer sb = new StringBuffer();
+                    sb.append("B").append("\n");
+                    sendMessage(sb.toString());
+                }
+                else if(event.getAction() == MotionEvent.ACTION_UP)
+                {
+                    StringBuffer sb = new StringBuffer();
+                    sb.append("S").append("\n");
+                    sendMessage(sb.toString());
+                }
+
+                return false;
+            }
+        });
+        left.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if(event.getAction() == MotionEvent.ACTION_DOWN)
+                {
+                    StringBuffer sb = new StringBuffer();
+                    sb.append("L").append("\n");
+                    sendMessage(sb.toString());
+                }
+                else if(event.getAction() == MotionEvent.ACTION_UP)
+                {
+                    StringBuffer sb = new StringBuffer();
+                    sb.append("S").append("\n");
+                    sendMessage(sb.toString());
+                }
+
+                return false;
+            }
+        });
+        right.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if(event.getAction() == MotionEvent.ACTION_DOWN)
+                {
+                    StringBuffer sb = new StringBuffer();
+                    sb.append("R").append("\n");
+                    sendMessage(sb.toString());
+                }
+                else if(event.getAction() == MotionEvent.ACTION_UP)
+                {
+                    StringBuffer sb = new StringBuffer();
+                    sb.append("S").append("\n");
+                    sendMessage(sb.toString());
+                }
+
+                return false;
+            }
+        });
+
+        stop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                StringBuffer sb = new StringBuffer();
+                sb.append("S").append("\n");
+                sendMessage(sb.toString());
+            }
+        });
     }
 
     @Override
